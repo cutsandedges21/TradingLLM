@@ -129,9 +129,11 @@ desktop and phone (free, private VPN — no public exposure). Open the desktop's
 (e.g. `http://100.x.y.z:8000`) on your phone and enter the key the same way. The desktop must be on.
 
 > The key is stored only in your phone's browser and sent as `X-API-Key` on every request. Treat the
-> URL as private — anyone with the URL **and** the key can drive your paper account. For an always-on
-> option (desktop off), you'd host the backend on a real server (Render/Railway/Fly) — heavier, and
-> still single-user; ask if you want to go that route.
+> URL as private — anyone with the URL **and** the key can drive your paper account.
+
+**Want it always-on (desktop off)?** Host it on a real server — connect the GitHub repo to
+**Render** (one-click Blueprint, redeploys on push) or use Fly.io / a VPS. Full guide:
+[`DEPLOY.md`](DEPLOY.md). (Vercel can't run it — it's a stateful server, not serverless.)
 
 ## Use it from other agents (MCP)
 

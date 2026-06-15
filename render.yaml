@@ -1,0 +1,28 @@
+# Render Blueprint — deploy straight from GitHub (no CLI).
+# In the Render dashboard: New > Blueprint > pick this repo. Render reads this file,
+# builds the Dockerfile, and redeploys on every push to main.
+#
+# A persistent disk + always-on require a paid plan (Starter, ~$7/mo). For a FREE
+# trial, set `plan: free` and DELETE the `disk:` block — but the free instance
+# SLEEPS after ~15 min (slow first load) and LOSES your paper data on recycle.
+services:
+  - type: web
+    name: trading-llm
+    runtime: docker
+    region: ohio              # oregon | ohio | virginia | frankfurt | singapore
+    plan: starter
+    healthCheckPath: /        # NOT /api/* — those require the key; "/" serves the UI (200)
+    autoDeploy: true
+    envVars:
+      - key: TRADING_LLM_API_KEY     # required for phone access — set in the dashboard
+        sync: false
+      - key: GEMINI_API_KEYS
+        sync: false
+      - key: OPENROUTER_API_KEYS
+        sync: false
+      - key: FINNHUB_API_KEY
+        sync: false
+    disk:
+      name: tllm-data
+      mountPath: /app/memory          # paper account, journal, alert rules persist here
+      sizeGB: 1

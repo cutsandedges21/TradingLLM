@@ -23,7 +23,9 @@ import webbrowser
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 HOST = os.environ.get("TRADING_LLM_HOST", "0.0.0.0")
-PORT = int(os.environ.get("TRADING_LLM_PORT", "8000"))
+# Honor a host-injected port (Render/Railway/Heroku set $PORT) so GitHub-connected
+# deploys "just work"; fall back to our own var, then 8000 for local use.
+PORT = int(os.environ.get("TRADING_LLM_PORT") or os.environ.get("PORT") or "8000")
 
 
 def _lan_ip() -> str | None:

@@ -12,10 +12,11 @@ RUN npm run build            # -> /web/dist (served by FastAPI)
 
 # --- stage 2: python runtime ---
 FROM python:3.12-slim
+# Note: no fixed TRADING_LLM_PORT — the app honors a host-injected $PORT
+# (Render/Railway), and falls back to 8000 (used by Fly's internal_port).
 ENV PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
     TRADING_LLM_HOST=0.0.0.0 \
-    TRADING_LLM_PORT=8000 \
     TRADING_LLM_NO_BROWSER=1
 WORKDIR /app
 

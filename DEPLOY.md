@@ -26,7 +26,36 @@ Always-Free VM** if you want $0 forever and don't mind a bit more setup. Both ru
 
 ---
 
-## Option A — Fly.io (recommended)
+## Option A — Render: deploy straight from GitHub (no CLI) ⭐ easiest
+
+This is the "like Vercel, but it runs a real server" path — connect the repo once and it
+**redeploys on every push to `main`**. The repo already includes a `render.yaml` blueprint.
+
+1. Go to **https://render.com** → sign up with GitHub.
+2. **New ▸ Blueprint** → pick the **`TradingLLM`** repo. Render reads `render.yaml`,
+   sees the `Dockerfile`, and proposes a web service + a 1 GB disk at `/app/memory`.
+3. It will prompt for the secret env vars (they're marked `sync: false`):
+   - `TRADING_LLM_API_KEY` = a long random string (this is your phone's access key)
+   - `GEMINI_API_KEYS`, `OPENROUTER_API_KEYS`, `FINNHUB_API_KEY` = your keys
+   - *(optional)* `ALPACA_PAPER_KEY`, `ALPACA_PAPER_SECRET`
+4. **Apply** → first build takes a few minutes. You get a URL like
+   `https://trading-llm.onrender.com`.
+5. **On your phone:** open that URL → **Settings ▸ Remote access** → paste
+   `TRADING_LLM_API_KEY` → *Save & reconnect*. Done — desktop off, works anywhere. 🎉
+
+**Cost:** the blueprint uses the **Starter** plan (~$7/mo) because a persistent disk +
+always-on require a paid plan. For **$0**, edit `render.yaml`: set `plan: free` and remove
+the `disk:` block — but the free instance **sleeps after ~15 min** (≈50 s cold start) and
+**loses your paper data** when it recycles. Good for trying it; not for daily use.
+
+> No-CLI alternatives that also deploy from GitHub: **Railway** (great DX, persistent
+> volumes, ~$5/mo, no real free tier) and **Koyeb** (has a small free instance). Both read
+> the same `Dockerfile`. **Fly.io can auto-deploy from GitHub too**, but via a GitHub Action
+> with a `FLY_API_TOKEN` secret — the CLI path below is simpler to start.
+
+---
+
+## Option B — Fly.io (recommended if you want cheapest always-on)
 
 1. **Install the CLI** and sign in (a card is required even on the free allowance):
    ```bash
@@ -58,7 +87,7 @@ Always-Free VM** if you want $0 forever and don't mind a bit more setup. Both ru
 
 ---
 
-## Option B — A VPS (Oracle Always-Free or any $5 droplet)
+## Option C — A VPS (Oracle Always-Free or any $5 droplet)
 
 On the server (with Docker installed):
 ```bash
