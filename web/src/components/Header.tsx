@@ -21,12 +21,12 @@ function RegimeChip({ regime, onClick }: { regime: Regime; onClick: () => void }
   )
 }
 
-function Pill({ label, value, tone = 'muted', live = false }: {
-  label: string; value: string; tone?: 'up' | 'gold' | 'muted'; live?: boolean
+function Pill({ label, value, tone = 'muted', live = false, className = '' }: {
+  label: string; value: string; tone?: 'up' | 'gold' | 'muted'; live?: boolean; className?: string
 }) {
   const dot = tone === 'up' ? 'bg-up' : tone === 'gold' ? 'bg-gold' : 'bg-faint'
   return (
-    <div className="flex items-center gap-2 border-l border-line pl-3">
+    <div className={cn('flex items-center gap-2 border-l border-line pl-3', className)}>
       <span className={cn('h-1.5 w-1.5 rounded-full', dot, live && 'live-dot')} />
       <span className="eyebrow hidden sm:inline">{label}</span>
       <span className="font-mono text-[11px] text-ink/90">{value}</span>
@@ -94,23 +94,24 @@ export function Header({ title, subtitle, status, marketOpen, regime, onRegime, 
           )}
         </div>
         {regime?.ok && <RegimeChip regime={regime} onClick={onRegime ?? (() => {})} />}
-        <Pill label="brain" value={brains[0] ?? '…'} tone="gold" />
-        <Pill label="data" value={status ? status.data_sources.slice(0, 2).join(' · ') : '…'} />
+        {/* info pills are secondary — hide on phones to keep the bar one line */}
+        <Pill label="brain" value={brains[0] ?? '…'} tone="gold" className="hidden md:flex" />
+        <Pill label="data" value={status ? status.data_sources.slice(0, 2).join(' · ') : '…'} className="hidden md:flex" />
         {status?.brain_mode && (
           <button onClick={onToggleBrain} title="Toggle cloud (fast) / local (private) brain"
-            className={cn('ml-1 flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] transition-colors',
+            className={cn('flex items-center gap-1.5 rounded-full border px-2.5 py-1.5 text-[11px] transition-colors sm:ml-1 sm:px-3',
               status.brain_mode === 'local' ? 'border-gold/40 bg-gold/10 text-gold' : 'border-line text-muted hover:text-ink')}>
             {status.brain_mode === 'local' ? <Cpu size={13} /> : <Cloud size={13} />}
-            {status.brain_mode === 'local' ? 'Local' : 'Cloud'}
+            <span className="hidden sm:inline">{status.brain_mode === 'local' ? 'Local' : 'Cloud'}</span>
           </button>
         )}
         <button onClick={onToggleBeginner} title="Beginner mode — the copilot explains everything and defines every term"
-          className={cn('flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] transition-colors',
+          className={cn('flex items-center gap-1.5 rounded-full border px-2.5 py-1.5 text-[11px] transition-colors sm:px-3',
             beginner ? 'border-gold/40 bg-gold/10 text-gold' : 'border-line text-muted hover:text-ink')}>
-          <GraduationCap size={13} /> Beginner
+          <GraduationCap size={13} /> <span className="hidden sm:inline">Beginner</span>
         </button>
-        <button onClick={onLearn}
-          className="flex items-center gap-1.5 rounded-full bg-gold px-4 py-1.5 text-[12px] font-semibold text-obsidian transition-transform hover:scale-[1.03] active:scale-95">
+        <button onClick={onLearn} aria-label="Learn"
+          className="flex items-center gap-1.5 rounded-full bg-gold px-3 py-1.5 text-[12px] font-semibold text-obsidian transition-transform hover:scale-[1.03] active:scale-95 sm:px-4">
           <BookOpen size={14} /> Learn
         </button>
       </div>

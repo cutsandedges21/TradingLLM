@@ -212,7 +212,7 @@ export default function App() {
   const title = TITLES[view]
 
   return (
-    <div className="grain engrave relative flex h-screen w-screen flex-col overflow-hidden md:flex-row">
+    <div className="grain engrave relative flex h-dvh w-full flex-col overflow-hidden md:flex-row">
       <Background />
       <Sidebar view={view} onNav={setView} />
 

@@ -216,8 +216,8 @@ function FactorsTab() {
       </div>
       {busy && <Spinner label="Scoring factors (IC/IR over real data)…" />}
       {data && !busy && (data.ok ? (
-        <div className="overflow-hidden rounded-2xl border border-line bg-panel/40">
-          <table className="w-full text-[13px]">
+        <div className="overflow-x-auto rounded-2xl border border-line bg-panel/40">
+          <table className="w-full min-w-[640px] text-[13px]">
             <thead>
               <tr className="border-b border-line text-left">
                 {['Factor', 'Type', 'IC mean', 'IR', 'IC>0', 'Top−Bot', 'Read'].map((h) => (
@@ -764,12 +764,13 @@ export function StudioPage({ onPropose }: { onPropose?: (p: Proposal) => void })
   return (
     <div className="h-full overflow-y-auto">
       <div className="mx-auto max-w-5xl p-4">
-        <div className="mb-4 flex gap-1 rounded-xl border border-line bg-panel/40 p-1">
+        <div className="mb-4 flex gap-1 overflow-x-auto rounded-xl border border-line bg-panel/40 p-1
+                        [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {tabs.map((t) => {
             const Icon = t.icon
             return (
               <button key={t.id} onClick={() => setTab(t.id)}
-                className={cn('flex flex-1 items-center justify-center gap-2 rounded-lg py-2 text-[13px] transition-colors',
+                className={cn('flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 text-[13px] transition-colors sm:flex-1',
                   tab === t.id ? 'bg-gold/12 text-gold' : 'text-muted hover:text-ink')}>
                 <Icon size={15} /> {t.label}
               </button>
