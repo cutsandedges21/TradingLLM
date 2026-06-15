@@ -1,0 +1,77 @@
+{
+  "watchlist": [
+    "BTC/USD",
+    "ETH/USD",
+    "GC=F",
+    "SI=F",
+    "CL=F"
+  ],
+  "default_timeframe": "1Day",
+  "bars_lookback": 120,
+  "data_source_order": [
+    "finnhub",
+    "yfinance",
+    "alpaca"
+  ],
+  "trading_mode": "mock",
+  "mock_starting_cash": 100000,
+  "beginner_mode": false,
+  "execution": {
+    "slippage_bps": 2.0,
+    "fee_bps": 1.0
+  },
+  "llm": {
+    "provider_order": [
+      "gemini",
+      "openrouter",
+      "ollama"
+    ],
+    "gemini_model": "gemini-2.5-flash",
+    "gemini_deep_model": "gemini-2.5-flash",
+    "openrouter_models": [
+      "meta-llama/llama-3.3-70b-instruct:free",
+      "qwen/qwen-2.5-72b-instruct:free",
+      "meta-llama/llama-3.1-8b-instruct:free"
+    ],
+    "ollama_model": "llama3.1:8b",
+    "temperature": 0.4,
+    "max_tokens": 2048
+  },
+  "risk": {
+    "max_position_usd": 2000,
+    "max_trades_per_day": 10,
+    "require_confirmation": true,
+    "account_risk_pct": 0.01,
+    "max_portfolio_heat_pct": 0.06,
+    "default_stop_pct": 0.1,
+    "max_position_pct": 0.2
+  },
+  "live_trading": {
+    "enabled": false,
+    "max_order_usd": 1000,
+    "max_trades_per_day": 5,
+    "allowed_symbols": []
+  },
+  "debate": {
+    "research_rounds": 1,
+    "risk_rounds": 1
+  },
+  "signals": {
+    "enabled": true,
+    "sec_user_agent": "TradingLLM research sportsdude3133@gmail.com",
+    "cache_ttl_hours": 12,
+    "sources": {
+      "insiders": true,
+      "institutional_13f": true,
+      "congress": true
+    },
+    "famous_filers": [
+      { "cik": "0001067983", "name": "Berkshire Hathaway" },
+      { "cik": "0001350694", "name": "Bridgewater Associates" },
+      { "cik": "0001037389", "name": "Renaissance Technologies" },
+      { "cik": "0001423053", "name": "Citadel Advisors" },
+      { "cik": "0001167483", "name": "Scion Asset Management (Burry)" }
+    ],
+    "congress_sources": null
+  }
+}

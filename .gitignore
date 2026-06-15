@@ -1,0 +1,25 @@
+# Secrets — never commit real keys
+config/api_keys.json
+
+# Persistent local memory (your private trading data) — keep the folder, drop its contents
+memory/*
+!memory/.gitkeep
+
+# Reference clones (5 third-party trading repos analyzed during the redesign) — not ours to commit
+cloned-repos/
+
+# Playwright / screenshots
+.playwright-mcp/
+*.png
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# Web UI
+web/node_modules/
+web/dist/
+web/_preview_*.png

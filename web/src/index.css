@@ -1,0 +1,170 @@
+/* ───────────────────────────────────────────────────────────────
+   ATLAS — an editorial-dark quant research terminal.
+   Cool ink canvas · ivory type · signal-cyan accent · serif display.
+   Typography: Fraunces (display) · Hanken Grotesk (UI) · Spline Sans Mono (data).
+   ─────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* surfaces (cool ink) */
+  --color-obsidian: #080a0f;
+  --color-panel: #0d1018;
+  --color-panel-2: #131823;
+  --color-elevated: #1a2130;
+  --color-line: rgba(220, 228, 245, 0.08);
+  --color-line-strong: rgba(220, 228, 245, 0.15);
+
+  /* accent (signal cyan) — token name kept as "gold" for compatibility */
+  --color-gold: #4fe0cd;
+  --color-gold-soft: #8df1e4;
+  --color-gold-dim: #2a9e8e;
+
+  /* semantics */
+  --color-up: #34d39a;
+  --color-down: #ff6b81;
+
+  /* type colors */
+  --color-ink: #eef1f7;
+  --color-muted: #9aa3b6;
+  --color-faint: #5b6478;
+
+  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Spline Sans Mono", ui-monospace, "JetBrains Mono", monospace;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-obsidian);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  letter-spacing: -0.005em;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* editorial small-caps label */
+.eyebrow {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 10px;
+  color: var(--color-faint);
+}
+
+/* hairline rule with a centered tick, like a ledger */
+.rule {
+  height: 1px;
+  background: var(--color-line);
+}
+
+/* atmospheric grain overlay */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* faint engraved gridlines for the canvas */
+.engrave {
+  background-image:
+    linear-gradient(to right, rgba(220, 228, 245, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(220, 228, 245, 0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(220, 228, 245, 0.09);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(220, 228, 245, 0.2);
+  background-clip: content-box;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+.live-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise { animation: rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .live-dot, .rise { animation: none !important; }
+}
+
+/* visible keyboard focus for accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ── markdown (chat replies + Learn) ── */
+.prose-terminal h1 { font-family: var(--font-display); font-weight: 600; font-size: 1.55rem; color: var(--color-ink); margin: 1.4rem 0 0.6rem; letter-spacing: -0.02em; }
+.prose-terminal h2 { font-family: var(--font-display); font-weight: 500; font-size: 1.2rem; color: var(--color-ink); margin: 1.5rem 0 0.5rem; letter-spacing: -0.01em; }
+.prose-terminal h3 { font-weight: 600; color: var(--color-ink); margin: 1.05rem 0 0.3rem; font-size: 0.98rem; }
+.prose-terminal h4 { font-weight: 600; color: var(--color-gold-soft); margin: 1rem 0 0.25rem; font-size: 0.9rem; }
+.prose-terminal p { color: #c5cbd8; line-height: 1.72; margin: 0.55rem 0; }
+.prose-terminal ul { margin: 0.5rem 0 0.8rem; padding-left: 1.1rem; }
+.prose-terminal ol { margin: 0.5rem 0 0.8rem; padding-left: 1.3rem; }
+.prose-terminal li { color: #bcc3d2; line-height: 1.62; margin: 0.25rem 0; }
+.prose-terminal ul li { list-style: none; position: relative; padding-left: 1rem; }
+.prose-terminal ul li::before { content: "—"; position: absolute; left: 0; color: var(--color-gold-dim); }
+.prose-terminal strong { color: var(--color-ink); font-weight: 600; }
+.prose-terminal em { color: #d6dbe6; }
+.prose-terminal blockquote { border-left: 2px solid var(--color-gold-dim); padding-left: 0.9rem; color: var(--color-muted); margin: 0.9rem 0; font-style: italic; }
+.prose-terminal code { font-family: var(--font-mono); background: var(--color-panel-2); padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.85em; color: var(--color-gold-soft); }
+.prose-terminal table { width: 100%; border-collapse: collapse; margin: 0.8rem 0; font-size: 0.88rem; font-variant-numeric: tabular-nums; }
+.prose-terminal th, .prose-terminal td { border: 1px solid var(--color-line); padding: 0.45rem 0.6rem; text-align: left; }
+.prose-terminal th { background: var(--color-panel-2); color: var(--color-muted); font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.prose-terminal a { color: var(--color-gold); text-decoration: underline; text-underline-offset: 2px; }
+.prose-terminal hr { border: none; border-top: 1px solid var(--color-line); margin: 1.2rem 0; }
+
+/* compact prose for the debate report sections */
+.prose-report p { margin: 0.4rem 0; line-height: 1.66; font-size: 0.86rem; }
+.prose-report ul { margin: 0.35rem 0 0.55rem; }
+.prose-report li { font-size: 0.84rem; }
+.prose-report table { font-size: 0.8rem; }

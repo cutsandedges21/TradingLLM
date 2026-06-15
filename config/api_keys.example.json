@@ -1,0 +1,15 @@
+{
+  "_comment": "Copy this to api_keys.json and fill in your keys. LLM keys: add 1 or 2 of each (extras are rotated to dodge free-tier rate limits). finnhub_api_key: free real-time stock quotes from https://finnhub.io (no identity check). Alpaca keys are OPTIONAL (only if you want real Alpaca paper trading instead of the built-in local mock account).",
+  "gemini_api_keys": [
+    "YOUR_FIRST_GEMINI_KEY",
+    "YOUR_SECOND_GEMINI_KEY_OPTIONAL"
+  ],
+  "openrouter_api_keys": [
+    "YOUR_FIRST_OPENROUTER_KEY",
+    "YOUR_SECOND_OPENROUTER_KEY_OPTIONAL"
+  ],
+  "finnhub_api_key": "YOUR_FINNHUB_KEY",
+  "alpaca_paper_key": "YOUR_ALPACA_PAPER_KEY_OPTIONAL",
+  "alpaca_paper_secret": "YOUR_ALPACA_PAPER_SECRET",
+  "alpaca_paper": true
+}

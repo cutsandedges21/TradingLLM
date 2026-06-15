@@ -1,0 +1,26 @@
+# Trading LLM v2 dependencies  (Python >= 3.11)
+
+# --- core (Phase 0): live data, indicators, brain providers, web server ---
+fastapi>=0.110        # web API
+uvicorn>=0.27         # ASGI server
+pydantic>=2.0         # request models
+yfinance>=0.2         # stocks + crypto bars/prices (no signup)
+finnhub-python>=2.4   # real-time stock quotes + news (free API key)
+alpaca-py>=0.40       # OPTIONAL: Alpaca data + real paper brokerage
+google-genai>=1.0     # Gemini (primary cloud brain)
+ollama>=0.3           # local model client (offline fallback)
+pandas>=2.0           # bars + indicator math
+numpy>=1.24
+requests>=2.28        # OpenRouter + Binance HTTP calls
+
+# --- Phase 1 (multi-agent "deep analysis" debate) ---
+# The provider router's get_llm() seam returns LangChain chat models that drive
+# the multi-agent debate. If these are absent, deep analysis gracefully falls
+# back to the single-brain path — install them to enable the committee.
+langchain-core>=0.3
+langchain-google-genai>=2.0   # debate via Gemini (your default provider)
+langchain-openai>=0.2         # debate via OpenRouter (optional)
+langchain-ollama>=0.2         # debate via local Ollama (optional, offline)
+
+# --- Phase 8 (agent-native): expose the app as MCP tools to other agents ---
+mcp>=1.0                      # `python -m trading_llm.agentic.mcp_server`
