@@ -1,0 +1,23 @@
+# Fly.io config — `fly launch --no-deploy` will adopt this, then `fly deploy`.
+# Change `app` to a unique name and `primary_region` to one near you
+# (fly platform regions — e.g. yyz=Toronto, ewr=New Jersey, lhr=London).
+app = "trading-llm"
+primary_region = "yyz"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_start_machines = true
+  auto_stop_machines = false      # stay up so your phone always reaches it
+  min_machines_running = 1
+
+[[mounts]]
+  source = "tllm_data"            # persistent volume -> your paper account, journal, rules
+  destination = "/app/memory"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"                # pandas + langchain need headroom; 256mb is too tight

@@ -15,7 +15,7 @@ const StudioPage = lazy(() => import('./pages/StudioPage').then((m) => ({ defaul
 const LibraryPage = lazy(() => import('./pages/LibraryPage').then((m) => ({ default: m.LibraryPage })))
 const SmartMoneyPage = lazy(() => import('./pages/SmartMoneyPage').then((m) => ({ default: m.SmartMoneyPage })))
 import { useLiveQuotes } from './hooks/useLiveQuotes'
-import { api } from './api'
+import { api, authHeaders } from './api'
 import type { Account, ChatMessage, Position, Proposal, Regime, Status, View, WatchRow } from './types'
 
 const TRADE_RE = /```trade[\s\S]*?```/g
@@ -121,7 +121,7 @@ export default function App() {
 
   const streamChat = async (text: string) => {
     const res = await fetch('/api/chat/stream', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeaders() },
       body: JSON.stringify({ message: text, deep: true }),
     })
     if (!res.body) throw new Error('streaming not supported')

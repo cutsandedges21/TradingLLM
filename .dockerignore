@@ -1,0 +1,22 @@
+# Keep the build context small + never ship secrets/data into the image.
+.git
+.gitignore
+config/api_keys.json
+memory/
+cloned-repos/
+docs/
+tests/
+.playwright-mcp/
+*.png
+__pycache__/
+**/__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+web/node_modules/
+web/dist/
+web/_preview_*.png
+*.md
+!LEARN_TO_TRADE.md
+Run Trading LLM (Web).bat

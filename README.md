@@ -91,18 +91,47 @@ Smart-money signals are **public, lagged** disclosures (Form 4 ~2 days, 13F ~45 
 
 ## Security & secrets
 
-This is a **local, single-user** app — it binds to `127.0.0.1` and trusts loopback.
+This is a **local, single-user** app. It listens on your network (`0.0.0.0`) so your phone can
+reach it, but **only loopback is trusted without a key** — every remote device must authenticate.
 
 - **Remote access requires a key.** Any non-loopback request to `/api/*` must send
   `X-API-Key: <key>` where the key is set via `TRADING_LLM_API_KEY` (env) or `api_auth_key`
   (settings). Without a key configured, non-local requests are refused outright. Local use is
-  unaffected.
+  unaffected. To stay localhost-only, run with `TRADING_LLM_HOST=127.0.0.1`.
 - **Keep secrets out of the synced folder.** This project lives in OneDrive, so `api_keys.json`
   is cloud-synced. Prefer **environment variables** — they override the file:
   `GEMINI_API_KEYS`, `OPENROUTER_API_KEYS`, `FINNHUB_API_KEY`, `ALPACA_PAPER_KEY`,
   `ALPACA_PAPER_SECRET`. `api_keys.json` and all of `memory/*` are `.gitignore`d.
 - **Memory writes are atomic** (temp-file + replace), so a crash or sync mid-write won't corrupt
   your journal/account files.
+
+## Use it on your phone
+
+The app runs on your **desktop**; your phone just opens it in a browser. Nothing is hosted in the
+cloud — your keys and trading data never leave your machine. (Vercel/serverless can't run this —
+it's a stateful local server. This is the supported way to go mobile.)
+
+**1. Set an access key** in `config/settings.json` (any secret string):
+```json
+{ "api_auth_key": "pick-a-long-random-string" }
+```
+
+**2. Run the app** as usual (`python app_web.py` / the `.bat`). It now prints a **Phone** URL, e.g.
+`http://192.168.1.50:8000`. (First time, allow Python through the **Windows Firewall** for *Private*
+networks so the port is reachable.)
+
+**3a. Same Wi-Fi (simplest):** on your phone, open that `http://<desktop-ip>:8000` URL → go to
+**Settings → Remote access** → paste the key → *Save & reconnect*. Done. Works whenever the desktop
+is on and you're on the same network.
+
+**3b. From anywhere (cell data too):** install [**Tailscale**](https://tailscale.com) on both the
+desktop and phone (free, private VPN — no public exposure). Open the desktop's Tailscale address
+(e.g. `http://100.x.y.z:8000`) on your phone and enter the key the same way. The desktop must be on.
+
+> The key is stored only in your phone's browser and sent as `X-API-Key` on every request. Treat the
+> URL as private — anyone with the URL **and** the key can drive your paper account. For an always-on
+> option (desktop off), you'd host the backend on a real server (Render/Railway/Fly) — heavier, and
+> still single-user; ask if you want to go that route.
 
 ## Use it from other agents (MCP)
 

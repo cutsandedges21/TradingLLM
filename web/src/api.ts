@@ -7,10 +7,24 @@ import type {
   AlertRule, AlertFields, AlertEval, RuleBacktest,
 } from './types'
 
+// Remote (phone) access: the server requires an X-API-Key for non-loopback
+// requests. The key is stored locally in the browser and sent on every call.
+const KEY_STORAGE = 'tllm_api_key'
+export function getApiKey(): string {
+  try { return localStorage.getItem(KEY_STORAGE) || '' } catch { return '' }
+}
+export function setApiKey(k: string) {
+  try { k ? localStorage.setItem(KEY_STORAGE, k.trim()) : localStorage.removeItem(KEY_STORAGE) } catch { /* ignore */ }
+}
+export function authHeaders(): Record<string, string> {
+  const k = getApiKey()
+  return k ? { 'X-API-Key': k } : {}
+}
+
 async function j<T>(url: string, opts?: RequestInit): Promise<T> {
   const r = await fetch(url, {
-    headers: { 'Content-Type': 'application/json' },
     ...opts,
+    headers: { 'Content-Type': 'application/json', ...authHeaders(), ...(opts?.headers as Record<string, string> | undefined) },
   })
   if (!r.ok) throw new Error(`${url} -> ${r.status}`)
   return r.json() as Promise<T>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Check, Plus, RotateCcw, X } from 'lucide-react'
-import { api } from '../api'
+import { Check, Plus, RotateCcw, Smartphone, X } from 'lucide-react'
+import { api, getApiKey, setApiKey } from '../api'
 import { money } from '../lib'
 import type { Account, SettingsView } from '../types'
 
@@ -22,6 +22,9 @@ export function SettingsPage({ account, onChanged }: { account: Account | null; 
   const [wl, setWl] = useState<string[]>([])
   const [newSym, setNewSym] = useState('')
   const [saved, setSaved] = useState('')
+  const [apiKey, setApiKeyState] = useState(getApiKey())
+  const isRemote = typeof window !== 'undefined'
+    && !['localhost', '127.0.0.1', '::1', ''].includes(window.location.hostname)
 
   useEffect(() => {
     api.getSettings().then((s) => {
@@ -49,6 +52,7 @@ export function SettingsPage({ account, onChanged }: { account: Account | null; 
     onChanged()
   }
   const resetLabel = `Reset to ${money(parseFloat(cash) || 0, 0)}`
+  const saveKey = () => { setApiKey(apiKey); flash('Access key saved — reconnecting'); setTimeout(() => window.location.reload(), 700) }
 
   return (
     <div className="h-full overflow-y-auto p-4 md:p-8">
@@ -57,6 +61,28 @@ export function SettingsPage({ account, onChanged }: { account: Account | null; 
           <div className="font-display text-2xl">Settings</div>
           <div className="text-[12px] text-faint">configure your paper account and watchlist</div>
         </div>
+
+        <Section title="Remote access (phone)"
+          desc="Reaching this from your phone? The server requires the access key you set in config/settings.json (api_auth_key). Paste it here once — it's stored only in this browser and sent with every request. On the desktop (localhost) you don't need it.">
+          <div className="flex flex-wrap items-end gap-3">
+            <div className="flex items-center gap-2 text-[12px]">
+              <Smartphone size={15} className={isRemote ? 'text-gold' : 'text-faint'} />
+              <span className={isRemote ? 'text-gold' : 'text-faint'}>
+                {isRemote ? 'remote device' : 'localhost (key optional)'}
+              </span>
+            </div>
+            <div className="flex-1">
+              <div className="mb-1 text-[10px] uppercase tracking-wider text-faint">Access key</div>
+              <input value={apiKey} onChange={(e) => setApiKeyState(e.target.value)} type="password"
+                placeholder="paste api_auth_key" autoComplete="off"
+                className="w-full min-w-[200px] rounded-lg border border-line bg-panel-2/50 px-3 py-2 font-mono text-sm text-ink placeholder:text-faint focus:border-line-strong focus:outline-none" />
+            </div>
+            <button onClick={saveKey}
+              className="flex items-center gap-1.5 rounded-lg bg-gold px-3.5 py-2 text-sm font-semibold text-obsidian transition-transform hover:scale-[1.02] active:scale-95">
+              <Check size={14} /> Save &amp; reconnect
+            </button>
+          </div>
+        </Section>
 
         <Section title="Paper account" desc="Set your simulated starting balance. Resetting clears positions and restores cash to this amount.">
           <div className="flex flex-wrap items-end gap-4">
